@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600">
+  <style>
+    .box { fill:#f8f9fa; stroke:#2b6cb0; stroke-width:2; rx:6; }
+    .small { font: 12px/1.2 "Segoe UI", Arial, sans-serif; fill:#0b2447; }
+    .title { font: 16px/1.2 "Segoe UI", Arial, sans-serif; fill:#072146; font-weight:700 }
+    .arrow { stroke:#2b6cb0; stroke-width:2; marker-end:url(#arrowhead); }
+    .note { font: 13px/1.2 "Segoe UI", Arial, sans-serif; fill:#0b2447 }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2b6cb0" />
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="28" text-anchor="middle" class="title">Model Architecture — FinBERT + LSTM Ensemble</text>
+
+  <!-- News Input -->
+  <rect x="40" y="80" width="260" height="120" class="box"/>
+  <text x="170" y="110" text-anchor="middle" class="small">News Headlines</text>
+  <text x="170" y="130" text-anchor="middle" class="small">(daily/monthly)</text>
+  <text x="170" y="150" text-anchor="middle" class="small">tokenization → input_ids</text>
+
+  <!-- FinBERT -->
+  <rect x="340" y="60" width="260" height="160" class="box"/>
+  <text x="470" y="90" text-anchor="middle" class="small">FinBERT</text>
+  <text x="470" y="110" text-anchor="middle" class="small">(ProsusAI/finbert)</text>
+  <text x="470" y="130" text-anchor="middle" class="small">Transformer encoder → logits</text>
+  <text x="470" y="150" text-anchor="middle" class="small">Output: sentiment score (−1 .. +1)</text>
+
+  <!-- Arrow News -> FinBERT -->
+  <line x1="300" y1="140" x2="340" y2="140" class="arrow" />
+
+  <!-- Sentiment Aggregation box -->
+  <rect x="640" y="60" width="220" height="120" class="box"/>
+  <text x="750" y="95" text-anchor="middle" class="small">Monthly Sentiment</text>
+  <text x="750" y="115" text-anchor="middle" class="small">aggregate(finbert_scores)</text>
+  <text x="750" y="135" text-anchor="middle" class="small">result: single monthly score</text>
+
+  <!-- Arrow FinBERT -> Sentiment -->
+  <line x1="600" y1="140" x2="640" y2="140" class="arrow" />
+
+  <!-- Price Input -->
+  <rect x="40" y="240" width="260" height="120" class="box"/>
+  <text x="170" y="270" text-anchor="middle" class="small">Historical Prices</text>
+  <text x="170" y="290" text-anchor="middle" class="small">(monthly VW / close)</text>
+  <text x="170" y="310" text-anchor="middle" class="small">compute monthly returns</text>
+
+  <!-- Feature Construction -->
+  <rect x="340" y="240" width="520" height="120" class="box"/>
+  <text x="600" y="265" text-anchor="middle" class="small">Feature Matrix</text>
+  <text x="600" y="285" text-anchor="middle" class="small">sequence length = 4 months</text>
+  <text x="600" y="305" text-anchor="middle" class="small">each timestep: [monthly_return, monthly_sentiment]</text>
+
+  <!-- Arrow Prices -> Feature Matrix -->
+  <line x1="300" y1="300" x2="340" y2="300" class="arrow" />
+
+  <!-- Arrow Sentiment -> Feature Matrix -->
+  <line x1="760" y1="120" x2="760" y2="240" class="arrow" />
+
+  <!-- LSTM block -->
+  <rect x="420" y="380" width="360" height="140" class="box"/>
+  <text x="600" y="410" text-anchor="middle" class="small">StockLSTMRegressor</text>
+  <text x="600" y="430" text-anchor="middle" class="small">input_size=2, hidden_size=64</text>
+  <text x="600" y="450" text-anchor="middle" class="small">num_layers=2, dropout=0.2</text>
+  <text x="600" y="470" text-anchor="middle" class="small">sequence_length=4 → output: predicted_return</text>
+
+  <!-- Arrow Feature Matrix -> LSTM -->
+  <line x1="600" y1="360" x2="600" y2="380" class="arrow" />
+
+  <!-- Prediction output -->
+  <rect x="820" y="420" width="260" height="100" class="box"/>
+  <text x="950" y="450" text-anchor="middle" class="small">Prediction</text>
+  <text x="950" y="470" text-anchor="middle" class="small">predicted_return → predicted_price</text>
+  <text x="950" y="490" text-anchor="middle" class="small">investment advice: BUY / HOLD / SELL</text>
+
+  <!-- Arrow LSTM -> Prediction -->
+  <line x1="780" y1="450" x2="820" y2="450" class="arrow" />
+
+  <!-- Notes -->
+  <text x="60" y="560" class="note">Notes: VW = volume-weighted price; monthly aggregation; FinBERT processes headlines then monthly aggregation; LSTM trained on sequences of (returns, sentiment).</text>
+
+</svg>

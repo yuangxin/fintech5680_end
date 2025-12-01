@@ -1,0 +1,224 @@
+<svg viewBox="0 0 1200 1400" xmlns="http://www.w3.org/2000/svg">
+  <!-- 定义样式 -->
+  <defs>
+    <style>
+      .title { font-size: 24px; font-weight: bold; fill: #1a1a1a; }
+      .layer-title { font-size: 16px; font-weight: bold; fill: #fff; }
+      .module-title { font-size: 14px; font-weight: bold; fill: #1a1a1a; }
+      .text-small { font-size: 12px; fill: #333; }
+      .text-tiny { font-size: 11px; fill: #555; }
+      .box { stroke: #2c3e50; stroke-width: 2; fill: #ecf0f1; }
+      .box-blue { stroke: #3498db; stroke-width: 2; fill: #e8f4f8; }
+      .box-green { stroke: #27ae60; stroke-width: 2; fill: #eafaf1; }
+      .box-orange { stroke: #e67e22; stroke-width: 2; fill: #fef5e7; }
+      .box-purple { stroke: #8e44ad; stroke-width: 2; fill: #f4ecf7; }
+      .box-red { stroke: #e74c3c; stroke-width: 2; fill: #fadbd8; }
+      .arrow { stroke: #2c3e50; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .arrow-blue { stroke: #3498db; stroke-width: 2; fill: none; marker-end: url(#arrowhead-blue); }
+      .layer-ui { fill: #3498db; }
+      .layer-processing { fill: #e74c3c; }
+      .layer-model { fill: #f39c12; }
+      .layer-api { fill: #27ae60; }
+    </style>
+    
+    <!-- 箭头标记 -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#2c3e50"/>
+    </marker>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#3498db"/>
+    </marker>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1200" height="1400" fill="#f8f9fa"/>
+
+  <!-- 标题 -->
+  <text x="600" y="40" class="title" text-anchor="middle">FinBERT-LSTM 实时股票预测系统架构</text>
+  <text x="600" y="65" class="text-small" text-anchor="middle" fill="#666">Real-time Stock Prediction System Architecture</text>
+
+  <!-- ========== 第1层：用户界面层 ========== -->
+  <rect x="150" y="100" width="900" height="80" rx="5" class="layer-ui" fill="#3498db"/>
+  <text x="600" y="125" class="layer-title" text-anchor="middle">用户界面层 (Streamlit Web UI)</text>
+  <text x="600" y="150" class="text-small" text-anchor="middle" fill="#fff">streamlit_server.py / run_app.py</text>
+  <text x="600" y="165" class="text-small" text-anchor="middle" fill="#fff">📊 用户输入股票代码 → 预测结果展示</text>
+
+  <!-- 箭头向下 -->
+  <path d="M 600 180 L 600 220" class="arrow-blue"/>
+
+  <!-- ========== 第2层：实时处理管道 ========== -->
+  <rect x="200" y="220" width="800" height="70" rx="5" class="box-red"/>
+  <text x="600" y="250" class="module-title" text-anchor="middle">🔄 实时预测处理管道 (main.py)</text>
+  <text x="600" y="270" class="text-small" text-anchor="middle">协调日期计算、数据获取、特征工程、模型推理</text>
+
+  <!-- 箭头向下 -->
+  <path d="M 600 290 L 600 330" class="arrow"/>
+
+  <!-- ========== 第3层：并行数据采集 ========== -->
+  <!-- 路径分支 -->
+  <path d="M 600 330 L 300 330 L 300 370" class="arrow" stroke-dasharray="5,5"/>
+  <path d="M 600 330 L 900 330 L 900 370" class="arrow" stroke-dasharray="5,5"/>
+
+  <!-- 3.1 日期模块 -->
+  <rect x="150" y="370" width="300" height="110" rx="5" class="box-green"/>
+  <text x="300" y="395" class="module-title" text-anchor="middle">📅 日期计算模块</text>
+  <text x="300" y="415" class="text-small" text-anchor="middle">date_utils.py</text>
+  <rect x="160" y="425" width="280" height="45" fill="#fff" stroke="#27ae60" stroke-width="1" rx="3"/>
+  <text x="300" y="442" class="text-tiny" text-anchor="middle">• 获取日期范围</text>
+  <text x="300" y="457" class="text-tiny" text-anchor="middle">• 提取目标月份 (M-3, M-2, M-1, M)</text>
+  <text x="300" y="472" class="text-tiny" text-anchor="middle">• 计算时间窗口</text>
+
+  <!-- 3.2 价格数据模块 -->
+  <rect x="750" y="370" width="300" height="110" rx="5" class="box-blue"/>
+  <text x="900" y="395" class="module-title" text-anchor="middle">💰 历史价格获取</text>
+  <text x="900" y="415" class="text-small" text-anchor="middle">data_module.py</text>
+  <rect x="760" y="425" width="280" height="45" fill="#fff" stroke="#3498db" stroke-width="1" rx="3"/>
+  <text x="900" y="442" class="text-tiny" text-anchor="middle">• Polygon API 调用</text>
+  <text x="900" y="457" class="text-tiny" text-anchor="middle">• 获取月度股价数据</text>
+  <text x="900" y="472" class="text-tiny" text-anchor="middle">• 计算月度涨幅 (%)</text>
+
+  <!-- 汇合箭头 -->
+  <path d="M 300 480 L 300 520 L 600 520 L 600 560" class="arrow"/>
+  <path d="M 900 480 L 900 520 L 600 520" class="arrow"/>
+
+  <!-- ========== 第4层：新闻数据采集 ========== -->
+  <rect x="250" y="560" width="700" height="90" rx="5" class="box-orange"/>
+  <text x="600" y="585" class="module-title" text-anchor="middle">📰 新闻数据采集</text>
+  <text x="600" y="605" class="text-small" text-anchor="middle">Massive API / main.py</text>
+  <rect x="260" y="615" width="680" height="30" fill="#fff" stroke="#e67e22" stroke-width="1" rx="3"/>
+  <text x="600" y="635" class="text-tiny" text-anchor="middle">按月份搜索金融新闻 → 获取新闻标题和描述 → 按月度收集</text>
+
+  <!-- 箭头向下 -->
+  <path d="M 600 650 L 600 690" class="arrow"/>
+
+  <!-- ========== 第5层：FinBERT情感分析 ========== -->
+  <rect x="150" y="690" width="900" height="130" rx="5" class="box-purple"/>
+  <text x="600" y="720" class="module-title" text-anchor="middle">🧠 情感分析模块 (FinBERT)</text>
+  <text x="600" y="740" class="text-small" text-anchor="middle">model.py - calculate_sentiment_score()</text>
+  
+  <rect x="160" y="755" width="880" height="60" fill="#fff" stroke="#8e44ad" stroke-width="1" rx="3"/>
+  <text x="600" y="772" class="text-tiny" text-anchor="middle">1️⃣ 加载预训练FinBERT模型 (金融领域特化)</text>
+  <text x="600" y="787" class="text-tiny" text-anchor="middle">2️⃣ 对每条新闻标题进行分类: Positive / Negative / Neutral</text>
+  <text x="600" y="802" class="text-tiny" text-anchor="middle">3️⃣ 按月份聚合 → 计算月度平均情感指标 (范围: -1 ~ +1)</text>
+
+  <!-- 箭头向下 -->
+  <path d="M 600 820 L 600 860" class="arrow"/>
+
+  <!-- ========== 第6层：特征工程 ========== -->
+  <rect x="150" y="860" width="900" height="150" rx="5" class="box-green"/>
+  <text x="600" y="890" class="module-title" text-anchor="middle">⚙️ Feature Engineering Module</text>
+  <text x="600" y="910" class="text-small" text-anchor="middle">Feature Assembly &amp; Normalization</text>
+  
+  <!-- 特征矩阵示意 -->
+  <rect x="200" y="925" width="800" height="75" fill="#fff" stroke="#27ae60" stroke-width="1" rx="3"/>
+  <text x="600" y="945" class="text-tiny" text-anchor="middle" font-weight="bold">输入矩阵 (4个月的滑动窗口)：</text>
+  
+  <!-- 表格 -->
+  <text x="250" y="965" class="text-tiny">月份</text>
+  <text x="380" y="965" class="text-tiny">历史涨幅</text>
+  <text x="520" y="965" class="text-tiny">情感指标</text>
+  <text x="650" y="965" class="text-tiny">标准化处理</text>
+  <text x="800" y="965" class="text-tiny">结果</text>
+  
+  <line x1="240" y1="970" x2="950" y2="970" stroke="#ccc" stroke-width="1"/>
+  
+  <text x="250" y="985" class="text-tiny">M-3</text>
+  <text x="380" y="985" class="text-tiny">r₁ = 2.5%</text>
+  <text x="520" y="985" class="text-tiny">s₁ = 0.3</text>
+  <text x="650" y="985" class="text-tiny">→ Zscore</text>
+  <text x="800" y="985" class="text-tiny">[-0.5, -1.2]</text>
+
+  <!-- 箭头向下 -->
+  <path d="M 600 1010 L 600 1050" class="arrow"/>
+
+  <!-- ========== 第7层：LSTM模型 ========== -->
+  <rect x="100" y="1050" width="1000" height="180" rx="5" class="box-blue"/>
+  <text x="600" y="1080" class="module-title" text-anchor="middle">🔮 LSTM时序预测模型</text>
+  <text x="600" y="1100" class="text-small" text-anchor="middle">model.py - StockLSTMRegressor</text>
+
+  <!-- LSTM架构 -->
+  <g>
+    <!-- 输入 -->
+    <rect x="120" y="1115" width="80" height="50" rx="3" fill="#e8f4f8" stroke="#3498db" stroke-width="1"/>
+    <text x="160" y="1145" class="text-tiny" text-anchor="middle" font-weight="bold">Input</text>
+    <text x="160" y="1158" class="text-tiny" text-anchor="middle">(4, 2)</text>
+
+    <!-- LSTM1 -->
+    <path d="M 200 1140 L 240 1140" class="arrow"/>
+    <rect x="240" y="1115" width="90" height="50" rx="3" fill="#fff8e1" stroke="#f39c12" stroke-width="1"/>
+    <text x="285" y="1143" class="text-tiny" text-anchor="middle" font-weight="bold">LSTM1</text>
+    <text x="285" y="1157" class="text-tiny" text-anchor="middle">64 units</text>
+
+    <!-- Dropout -->
+    <path d="M 330 1140 L 370 1140" class="arrow"/>
+    <rect x="370" y="1115" width="70" height="50" rx="3" fill="#fadbd8" stroke="#e74c3c" stroke-width="1"/>
+    <text x="405" y="1147" class="text-tiny" text-anchor="middle" font-weight="bold">Dropout</text>
+
+    <!-- LSTM2 -->
+    <path d="M 440 1140 L 480 1140" class="arrow"/>
+    <rect x="480" y="1115" width="90" height="50" rx="3" fill="#fff8e1" stroke="#f39c12" stroke-width="1"/>
+    <text x="525" y="1143" class="text-tiny" text-anchor="middle" font-weight="bold">LSTM2</text>
+    <text x="525" y="1157" class="text-tiny" text-anchor="middle">64 units</text>
+
+    <!-- 最后时间步 -->
+    <path d="M 570 1140 L 610 1140" class="arrow"/>
+    <rect x="610" y="1115" width="80" height="50" rx="3" fill="#eafaf1" stroke="#27ae60" stroke-width="1"/>
+    <text x="650" y="1140" class="text-tiny" text-anchor="middle" font-weight="bold">Last</text>
+    <text x="650" y="1154" class="text-tiny" text-anchor="middle">Output</text>
+
+    <!-- Linear -->
+    <path d="M 690 1140 L 730 1140" class="arrow"/>
+    <rect x="730" y="1115" width="80" height="50" rx="3" fill="#f4ecf7" stroke="#8e44ad" stroke-width="1"/>
+    <text x="770" y="1143" class="text-tiny" text-anchor="middle" font-weight="bold">Linear</text>
+    <text x="770" y="1157" class="text-tiny" text-anchor="middle">(64→1)</text>
+
+    <!-- 输出 -->
+    <path d="M 810 1140 L 850 1140" class="arrow"/>
+    <rect x="850" y="1115" width="100" height="50" rx="3" fill="#eafaf1" stroke="#27ae60" stroke-width="2"/>
+    <text x="900" y="1138" class="text-tiny" text-anchor="middle" font-weight="bold">Output</text>
+    <text x="900" y="1152" class="text-tiny" text-anchor="middle">下月涨幅 (%)</text>
+  </g>
+
+  <!-- 模型参数 -->
+  <rect x="120" y="1180" width="880" height="45" fill="#fff" stroke="#3498db" stroke-width="1" rx="3"/>
+  <text x="130" y="1197" class="text-tiny">• 输入大小: 2 (涨幅+情感)</text>
+  <text x="380" y="1197" class="text-tiny">• 隐层大小: 64</text>
+  <text x="630" y="1197" class="text-tiny">• 层数: 2</text>
+  <text x="130" y="1215" class="text-tiny">• Dropout率: 0.2</text>
+  <text x="380" y="1215" class="text-tiny">• 输出: 预测股价涨幅</text>
+  <text x="630" y="1215" class="text-tiny">• 损失函数: MSE</text>
+
+  <!-- 箭头向下 -->
+  <path d="M 600 1230 L 600 1270" class="arrow"/>
+
+  <!-- ========== 第8层：结果处理与展示 ========== -->
+  <rect x="150" y="1270" width="900" height="100" rx="5" class="box-red"/>
+  <text x="600" y="1300" class="module-title" text-anchor="middle">📊 结果处理与可视化</text>
+  
+  <rect x="160" y="1315" width="880" height="50" fill="#fff" stroke="#e74c3c" stroke-width="1" rx="3"/>
+  <text x="600" y="1332" class="text-tiny" text-anchor="middle">✅ 预测股价  |  📈 涨幅百分比  |  💬 新闻热度  |  😊 情感分析  |  📊 历史对比图表</text>
+  <text x="600" y="1358" class="text-tiny" text-anchor="middle">返回完整预测结果 JSON → 前端展示</text>
+
+  <!-- 图例 -->
+  <g>
+    <text x="50" y="1380" class="text-small" font-weight="bold">图例:</text>
+    <rect x="50" y="1385" width="20" height="15" fill="#3498db" stroke="#2c3e50" stroke-width="1"/>
+    <text x="75" y="1395" class="text-tiny">数据输入</text>
+
+    <rect x="150" y="1385" width="20" height="15" fill="#e74c3c" stroke="#2c3e50" stroke-width="1"/>
+    <text x="175" y="1395" class="text-tiny">处理流程</text>
+
+    <rect x="280" y="1385" width="20" height="15" fill="#f39c12" stroke="#2c3e50" stroke-width="1"/>
+    <text x="305" y="1395" class="text-tiny">模型推理</text>
+
+    <rect x="400" y="1385" width="20" height="15" fill="#27ae60" stroke="#2c3e50" stroke-width="1"/>
+    <text x="425" y="1395" class="text-tiny">计算结果</text>
+
+    <rect x="520" y="1385" width="20" height="15" fill="#8e44ad" stroke="#2c3e50" stroke-width="1"/>
+    <text x="545" y="1395" class="text-tiny">文本分析</text>
+
+    <rect x="640" y="1385" width="20" height="15" fill="#ecf0f1" stroke="#2c3e50" stroke-width="1"/>
+    <text x="665" y="1395" class="text-tiny">输入/输出</text>
+  </g>
+
+</svg>
